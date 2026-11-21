@@ -237,3 +237,32 @@ class PullResult(BaseModel):
     rows: list[dict[str, str | float | int | None]]
     sources: list[SourceFile]
     next_step: str
+
+    
+
+class VerificationCheck(BaseModel):
+    name: str
+    passed: bool
+    expected: str | None = None
+    actual: str | None = None
+    details: str
+
+
+class NullCount(BaseModel):
+    variable: str
+    plan_year: int
+    null_rows: int
+    matching_rows: int
+
+
+class VerificationReport(BaseModel):
+    ok: Literal[True] = True
+    request_fingerprint: str
+    all_checks_passed: bool
+    summary: str
+    checks: list[VerificationCheck]
+    null_counts: list[NullCount]
+    evidence_pack_valid: bool
+    evidence_pack_errors: list[dict]
+    evidence_files: dict[str, dict]
+    evidence_fingerprint: str

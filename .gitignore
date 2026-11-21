@@ -218,3 +218,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Deployment settings with workspace-specific names (template: app.yaml.example)
+app.yaml

@@ -1,0 +1,9 @@
+# Copy to app.yaml and fill in your own catalog and schema. app.yaml is git-ignored.
+command: ['python', 'app.py']
+env:
+  - name: 'DATABRICKS_WAREHOUSE_ID'
+    valueFrom: 'sql-warehouse'      # SQL warehouse app resource; no ID in code
+  - name: 'QHP_CATALOG'
+    value: '<your_catalog>'
+  - name: 'QHP_SCHEMA'
+    value: '<your_schema>'

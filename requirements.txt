@@ -1,0 +1,4 @@
+mcp==1.30.0
+pydantic==2.13.3
+databricks-sdk==0.122.0
+pyyaml==6.0.3

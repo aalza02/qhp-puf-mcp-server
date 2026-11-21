@@ -1,0 +1,81 @@
+version: 0.1.0
+validate_pack:
+- name: missing specpack.yaml manifest
+  input:
+    files:
+      spec/SPEC.md: '# hi
+
+        '
+      tests/tests.yaml: 'version: "0.1.0"
+
+        '
+  output:
+    valid: false
+    errors:
+    - code: MISSING_MANIFEST
+      path: specpack.yaml
+    warnings: []
+- name: invalid specpack_version
+  input:
+    files:
+      specpack.yaml: "specpack_version: \"0.2.0\"\nname: \"toy\"\nversion: \"0.1.0\"\
+        \nlicense: \"MIT\"\nentrypoints:\n  spec: \"spec/SPEC.md\"\n  tests: \"tests/tests.yaml\"\
+        \n"
+      spec/SPEC.md: '# toy spec
+
+
+        Hello.
+
+        '
+      tests/tests.yaml: "version: \"0.1.0\"\n\ntoy:\n  - name: \"example\"\n    input:\
+        \ 1\n    output: 1\n"
+  output:
+    valid: false
+    errors:
+    - code: INVALID_SPECPACK_VERSION
+      expected: 0.1.0
+    warnings: []
+- name: valid minimal pack
+  input:
+    files:
+      specpack.yaml: "specpack_version: \"0.1.0\"\nname: \"toy\"\nversion: \"0.1.0\"\
+        \nlicense: \"MIT\"\nentrypoints:\n  spec: \"spec/SPEC.md\"\n  tests: \"tests/tests.yaml\"\
+        \n"
+      spec/SPEC.md: '# toy spec
+
+
+        Hello.
+
+        '
+      tests/tests.yaml: "version: \"0.1.0\"\n\ntoy:\n  - name: \"example\"\n    input:\
+        \ 1\n    output: 1\n"
+  output:
+    valid: true
+    errors: []
+    warnings: []
+attest_pack:
+- name: sha256 lock matches utf-8 bytes
+  input:
+    files:
+      specpack.yaml: "specpack_version: \"0.1.0\"\nname: \"toy\"\nversion: \"0.1.0\"\
+        \nlicense: \"MIT\"\nentrypoints:\n  spec: \"spec/SPEC.md\"\n  tests: \"tests/tests.yaml\"\
+        \n"
+      spec/SPEC.md: '# toy spec
+
+
+        Hello.
+
+        '
+      tests/tests.yaml: "version: \"0.1.0\"\n\ntoy:\n  - name: \"example\"\n    input:\
+        \ 1\n    output: 1\n"
+  output:
+    files:
+      specpack.yaml:
+        sha256: 24e8d8eaeded62f3ae7c32ff63cdf42d4c880480e81b66a1443f35513cf86be1
+        bytes: 134
+      spec/SPEC.md:
+        sha256: eb6d51e6996b4bd4b26372d6c3f06eb4b1ffd29f7db2d740b57a2f5c6c1d7701
+        bytes: 19
+      tests/tests.yaml:
+        sha256: 3771d4308ced7e34f0217c53fda898c860008df26af508bca69470c18817a3d7
+        bytes: 70

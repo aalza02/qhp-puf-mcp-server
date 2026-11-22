@@ -215,3 +215,14 @@ class QhpDataAccess:
             results += [{"variable": f.variable, "plan_year": y, "excluded_rows": counts.get(y, 0)}
                         for y in request.plan_years]
         return results
+    
+    def distinct_values(self, dataset: str, variable: str, plan_years: list[int], max_values: int = 25) -> list[str] | None:
+        """The variable's distinct values (trimmed), or None if it has more than max_values (IDs, free text)."""
+        allowed, _ = self._column_rules(dataset)
+        column = quote_column(variable, allowed)
+        params = QueryParameters()
+        year_markers = ", ".join(params.add(y, "INT") for y in plan_years)
+        sql = (f"SELECT DISTINCT TRIM({column}) AS value FROM {self._settings.table(dataset)} "
+               f"WHERE plan_year IN ({year_markers}) AND {column} IS NOT NULL LIMIT {max_values + 1}")
+        values = sorted(r["value"] for r in self._run(sql, params).rows)
+        return None if len(values) > max_values else values

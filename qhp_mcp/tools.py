@@ -168,8 +168,21 @@ def _review_request(request: DataRequest, data: QhpDataAccess) -> tuple[list[str
             questions.append(f"CMS note on '{name}': {entry['notes']} Is that acceptable?")
     for f in request.filters:
         entry = check_variable(f.variable, "Filter variable")
-        if entry and f.is_numeric and not entry["is_numeric"]:
+        if not entry:
+            continue
+        if f.is_numeric and not entry["is_numeric"]:
             problems.append(f"'{f.variable}' holds text, so '{f.operator}' can't be used. Use equals, not_equals, or in.")
+        elif not f.is_numeric and checked_years:
+            # For short lists of values (e.g. tobacco, metal_level), reject values that never occur,
+            # so a typo or guessed value is caught here instead of silently matching 0 rows.
+            valid_values = data.distinct_values(request.dataset, f.variable, checked_years)
+            if valid_values is not None:
+                known = {v.lower() for v in valid_values}
+                wanted = f.value if f.operator == "in" else [f.value]
+                unknown = [w for w in wanted if w.lower() not in known]
+                if unknown:
+                    problems.append(f"Filter '{f.variable}': no rows have the value(s) {unknown}. "
+                                    f"Valid values: {valid_values}.")
     return problems, questions
 
 

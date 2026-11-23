@@ -20,10 +20,15 @@ MAX_TOOL_TEXT_FOR_MODEL = 15000  # keeps large pulls within the model's reading 
 
 SYSTEM_PROMPT = SERVER_INSTRUCTIONS + (
     " You are assisting a government analyst. Use only tool results and never invent numbers. "
+    "Turn EVERY condition in the user's question into a filter, for example a state, tobacco pricing, "
+    "metal level, age, or a price limit. State codes are two letters (Texas = 'TX'). If prepare_data_request "
+    "reports that a filter value does not exist, retry with one of the valid values it lists. "
+    "If the request has no filters, point that out and ask whether the user meant to narrow it. "
     "After prepare_data_request, show the plain_language_summary and every question to the user, then STOP "
     "and wait for their reply. Call pull_plan_data only after the user explicitly approves in a later message. "
     "After pulling, call verify_data_pull and report whether all checks passed and the evidence fingerprint."
 )
+
 
 
 class QhpChat:

@@ -33,7 +33,7 @@ data_pipeline/     notebooks that download, fingerprint, load, and catalog the C
 demo/chat_demo.py  chatbot demo: a Databricks-hosted LLM using the tools over MCP
 evaluation/        automated evaluation suite (27 cases)
 tests/specpack/    official SpecPack conformance tests
-docs/EVALUATION.md methodology, results, security, lessons learned
+docs/Evaluation.md methodology, results, security, lessons learned
 ```
 
 ## Data design (Unity Catalog)
@@ -62,7 +62,7 @@ Loaded row counts match the original CMS files exactly.
 
 ## Evaluation
 27 of 27 automated cases pass (accuracy vs. independent SQL, safety, tool design, reliability), plus 4 of 4 SpecPack
-conformance tests. Details: [docs/EVALUATION.md](docs/EVALUATION.md).
+conformance tests. Details: [docs/Evaluation.md](docs/Evaluation.md).
 
 ## License
 MIT
